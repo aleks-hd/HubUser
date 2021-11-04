@@ -3,6 +3,7 @@ package com.hfad.hubuser
 import android.app.Application
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
+import com.hfad.hubuser.model.GitRepo
 
 class App : Application() {
 
@@ -16,7 +17,7 @@ class App : Application() {
 
     val navigatorHolder get() = cicerone.getNavigatorHolder()
     val router get() = cicerone.router
-
+    val repository = GitRepo()
     override fun onCreate() {
         super.onCreate()
         instance = this

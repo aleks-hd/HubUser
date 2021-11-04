@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.hfad.hubuser.App
 import com.hfad.hubuser.databinding.FragmentUserItemBinding
+import com.hfad.hubuser.image.GlideImageLoad
 import com.hfad.hubuser.model.User
 import com.hfad.hubuser.presenter.UserPresenter
 import moxy.MvpAppCompatFragment
@@ -13,12 +14,12 @@ import moxy.ktx.moxyPresenter
 
 class UserItemFragment(val user: User) : MvpAppCompatFragment(), UsView,BackBtnListener {
 
+    private var vb: FragmentUserItemBinding? = null
 
     private val presenter by moxyPresenter {
         UserPresenter(App.instance.router, user)
     }
 
-    private var vb: FragmentUserItemBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +32,8 @@ class UserItemFragment(val user: User) : MvpAppCompatFragment(), UsView,BackBtnL
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         vb?.nameUserItem?.text = user.login
+        vb?.imageCard?.let { GlideImageLoad().loadInto(user.avatarUrl.toString(), it) }
+
     }
 
     override fun onDestroyView() {

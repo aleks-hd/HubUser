@@ -1,6 +1,7 @@
 package com.hfad.hubuser.presenter
 
 import android.util.Log
+import androidx.annotation.MainThread
 import com.github.terrakok.cicerone.Router
 import com.hfad.hubuser.App
 import com.hfad.hubuser.model.GitRepo
@@ -14,7 +15,7 @@ import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpPresenter
 
-class UserListPresenter(val uiScheduler: Scheduler,val router: Router, val gitRepo: IGitHubUserRepo, val screen:IScreen) :MvpPresenter<UserView>(),IItemClick {
+class UserListPresenter(val uiSchedulers: Scheduler,val router: Router, val gitRepo: IGitHubUserRepo, val screen:IScreen) :MvpPresenter<UserView>(),IItemClick {
 
 val listUsers = mutableListOf<User>()
 
@@ -32,9 +33,10 @@ val listUsers = mutableListOf<User>()
 
    fun  loadData(){
        gitRepo.getUsers()
-           .observeOn(Schedulers.io())
+           .observeOn(uiSchedulers)
            .subscribe({
                repor -> listUsers.addAll(repor)
+
             viewState.updateList()
            },{
                println("Error: ${it.message}")

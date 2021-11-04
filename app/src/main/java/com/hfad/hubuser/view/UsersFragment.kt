@@ -8,17 +8,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hfad.hubuser.App
 import com.hfad.hubuser.adapter.MainAdapter
 import com.hfad.hubuser.databinding.FragmentUserBinding
-import com.hfad.hubuser.model.GitRepo
 import com.hfad.hubuser.presenter.UserListPresenter
 import com.hfad.hubuser.request.RequestGitHubRepo
-import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class UsersFragment : MvpAppCompatFragment(), UserView,BackBtnListener {
 
     val listPresenter: UserListPresenter by moxyPresenter {
-        UserListPresenter(AndroidSchedulers.mainThread(),App.instance.router,RequestGitHubRepo(),ScreensPlay())
+        UserListPresenter(AndroidSchedulers.mainThread(),App.instance.router, RequestGitHubRepo(),ScreensPlay())
     }
 
     private var vb: FragmentUserBinding? = null
@@ -29,6 +28,7 @@ class UsersFragment : MvpAppCompatFragment(), UserView,BackBtnListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         vb = FragmentUserBinding.inflate(inflater, container, false)
         return vb?.root
     }
@@ -44,8 +44,8 @@ class UsersFragment : MvpAppCompatFragment(), UserView,BackBtnListener {
             this.recyclerContainer.layoutManager = LinearLayoutManager(context)
             adapter = MainAdapter(listPresenter)
             this.recyclerContainer.adapter = adapter
-
-          // updateList()
+            adapter?.notifyDataSetChanged()
+       updateList()
         }
     }
 
@@ -61,6 +61,7 @@ class UsersFragment : MvpAppCompatFragment(), UserView,BackBtnListener {
 
     override fun backPressed()= listPresenter.backClick()
     override fun updateList() {
+
       adapter?.notifyDataSetChanged()
     }
 }
